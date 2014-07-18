@@ -1,0 +1,14 @@
+---
+debian:
+    - squeeze
+    - wheezy
+    - jessie
+    - sid
+ubuntu:
+    - precise
+    - quantal
+    - raring
+    - saucy
+    - trusty
+    - utopic
+...

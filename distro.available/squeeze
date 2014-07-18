@@ -1,0 +1,7 @@
+---
+distro: squeeze
+os: debian
+mirror: http://mirror.yandex.ru/debian/
+arches: [i386, amd64]
+keyring: /usr/share/keyrings/debian-keyring.gpg
+...

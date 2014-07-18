@@ -1,0 +1,10 @@
+---
+branch: stable
+product: tarantool-lts
+repository:
+    debian: /home/buildbot/debian-stable
+    ubuntu: /home/buildbot/ubuntu-stable
+sign_id: tarantool-ru
+sign_email: tarantool-ru@googlegroups.com
+git: git://github.com/mailru/tarantool.git
+...
