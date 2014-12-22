@@ -1,5 +1,5 @@
 ---
-distro: quantal
+distro: vivid
 os: ubuntu
 mirror: http://mirror.yandex.ru/ubuntu/
 arches: [i386, amd64]

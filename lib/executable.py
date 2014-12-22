@@ -15,15 +15,16 @@ class Executable(object):
     def create_args(self, mapping):
         cmd = ''
         for k, v in mapping.iteritems():
-            k = k.replace('_', '-')
-            cmd += ' -'
-            if len(k) != 1:
-                cmd += '-'
-            cmd += k
+            lval = k.replace('_', '-')
+            lval = (' --' if len(lval) != 1 else ' -') + lval
             if v and (v is not True) and isinstance(v, basestring):
                 if len(shlex.split(v)) != 1:
                     v = repr(v)
-                cmd += ' ' + v
+                cmd += ' '.join([lval, v])
+            elif isinstance(v, (list, tuple)):
+                cmd += ' '.join([('%s %s' % (lval, k)) for k in v])
+            else:
+                cmd += lval
         return cmd
 
     def __init__(self):

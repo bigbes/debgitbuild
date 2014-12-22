@@ -18,14 +18,18 @@ class PBuilder(Executable):
                 'debootstrapopts': None,
                 'autocleanaptcache': True,
                 'override_config': True,
+                'buildplace': None,
+                'components': None,
         }
         args['basetgz']      = build_config.image
         args['mirror']       = build_config.distro['mirror']
         args['distribution'] = build_config.distro['distro']
         args['architecture'] = build_config.arch
-        args['debootstrapopts'] = '--variant=buildd'
+        args['buildplace']   = build_config.builddir
+        args['components']   = "main"
+        args['debootstrapopts'] = ['--variant=buildd']
         if 'keyring' in build_config.distro:
-            args['debootstrapopts'] += ' --keyring=' + build_config.distro['keyring']
+            args['debootstrapopts'].append(' --keyring=' + build_config.distro['keyring'])
 
         cmd_args = self.create_args(args)
         logging.info('Creating basebox - %s:%s into %s',
@@ -86,12 +90,14 @@ class PBuilder(Executable):
                 'basetgz': None,
                 'architecture': None,
                 'buildresult': None,
+                'buildplace': None,
                 'autocleanaptcache': True,
 #                'override_config': True,
         }
         args['basetgz']      = build_config.image
         args['architecture'] = build_config.arch
         args['buildresult']  = build_config.resultdir
+        args['buildplace']   = build_config.builddir
         cmd_args = self.create_args(args)
         logging.info('Building product %s:%s on %s into %s',
                 build_config.distro['distro'],
