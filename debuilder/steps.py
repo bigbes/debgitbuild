@@ -7,8 +7,8 @@ import contextlib
 
 import git
 
-from .utils import DPKG, DCH
-from .pbuilder import PBuilder
+from debuilder.utils import DPKG, DCH
+from debuilder.pbuilder import PBuilder
 
 
 @contextlib.contextmanager
@@ -44,7 +44,7 @@ class BuildConfig(object):
     def update_image(self):
         self.exe['pbuilder'].update_basebox(self)
 
-    def __init__(self, product, distro, arch):
+    def __init__(self, product, distro, arch, image=None, output=None):
         self.exe = {
                 'pbuilder': PBuilder(),
                 'dch'     : DCH(),
@@ -54,6 +54,12 @@ class BuildConfig(object):
         self.product = product
         self.arch    = arch
         self.dsc     = None
+        
+        # customize workdir
+        if output is not None: 
+            for key in self.variables.keys():
+                self.variables[key][0] = output
+
         for i in ['builddir', 'resultdir']:
             path = os.path.join(*self.variables[i])
             path = path.format(distro = distro['distro'], arch = arch)
@@ -67,7 +73,12 @@ class BuildConfig(object):
                 logging.error('Aborting.')
                 exit(1)
         path = os.path.join(*self.variables['image'])
-        self.image = path.format(distro = distro['distro'], arch = arch)
+        
+        # customize os image path
+        if image is not None:
+            self.image = image
+        else:
+            self.image = path.format(distro = distro['distro'], arch = arch)
         if not self.check_image():
             self.init_image()
         else:

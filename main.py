@@ -5,7 +5,7 @@ import yaml
 import logging
 import argparse
 
-from lib.steps import BuildConfig
+from debuilder import BuildConfig
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -17,6 +17,8 @@ def parse_args():
             type = str, default = '', dest = 'product')
     parser.add_argument('-v', '--verbose',
             action = 'count', default = False, dest = 'verbose')
+    parser.add_argument('-i', '--image', type=str, default=None, dest='image')
+    parser.add_argument('-o', '--output', type=str, default=None, dest='output')
     args = parser.parse_args()
     if not args.distro:
         logging.error('There\'s no distribution specified. Aborting.')
@@ -83,7 +85,10 @@ def main():
     distro_settings = check_distro(args.distro)
     check_arch(distro_settings, args.arch)
     product_settings = check_product(args.product, args.arch)
-    build_config = BuildConfig(product_settings, distro_settings, args.arch)
+    build_config = BuildConfig(
+        product_settings, distro_settings, args.arch, 
+        image=args.image, output=args.output
+    )
     build_config.prepare_sourcecode()
     build_config.build_sourcecode()
 

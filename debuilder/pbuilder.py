@@ -1,4 +1,4 @@
-from .executable import Executable, ExecutableError
+from debuilder.executable import Executable, ExecutableError
 
 import os
 import logging

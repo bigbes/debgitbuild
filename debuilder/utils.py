@@ -1,6 +1,6 @@
 import logging
 
-from .executable import Executable, ExecutableError
+from debuilder.executable import Executable, ExecutableError
 
 class DCH(Executable):
     def __init__(self):

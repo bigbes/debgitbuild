@@ -1,0 +1,10 @@
+---
+branch: master
+product: tarantool-php
+repository:
+    debian: /home/buildbot/debian-master
+    ubuntu: /home/buildbot/ubuntu-master
+sign_id: tarantool-ru
+sign_email: tarantool-ru@googlegroups.com
+git: git://github.com/tarantool/tarantool-php.git
+...
