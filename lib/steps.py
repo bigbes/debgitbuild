@@ -115,8 +115,7 @@ class BuildConfig(object):
             logging.error('Aborting.')
             exit(1)
         self.version = self.repo.git.describe().strip()
-        build_time = time.strftime('+%Y%m%d+%H%M')
-        self.deb_version = self.version.replace('-', '+') + build_time
+        self.deb_version = '%s~%s' % (self.version, self.distro['distro'])
         build_msg = "Automatic build of " + self.version
         new_dir_name = '{product}-{version}'.format(
                 product = self.product['product'],
