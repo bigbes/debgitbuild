@@ -54,7 +54,7 @@ class PBuilder(Executable):
                 'basetgz': None,
                 'distribution': None,
                 'architecture': None,
-                'override_config': True,
+                # 'override_config': True, # no overwrite
                 'autocleanaptcache': True,
         }
         args['basetgz']      = build_config.image
