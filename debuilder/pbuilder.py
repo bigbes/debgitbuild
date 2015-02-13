@@ -6,7 +6,7 @@ import logging
 class PBuilder(Executable):
     def __init__(self):
         Executable.__init__(self)
-        self.command = 'pbuilder'
+        self.command = 'sudo pbuilder'
 
     def create_basebox(self, build_config):
         self.subcommand = 'create'
