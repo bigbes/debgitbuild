@@ -7,7 +7,7 @@ import contextlib
 
 import git
 
-from debuilder.utils import DPKG, DCH
+from debuilder.utils import DPKG, DCH, Debsign
 from debuilder.pbuilder import PBuilder
 
 
@@ -159,19 +159,22 @@ class BuildConfig(object):
         self.exe['pbuilder'].build_product(self)
 
     def sign_package(self):
-        path_to = os.path.join(*self.variables['gitpath']).format(
+        path_to = os.path.join(*self.variables['resultdir']).format(
             distro=self.distro['distro'],
             arch=self.arch,
-            product=self.product['product']
         )
-        sign_id = self.distro['distro'].get('sign_id', None)
+        sign_id = self.product.get('sign_id', None)
         if not sign_id:
             logging.error('No sign id specified. Aborting')
             exit(1)
+        if not self.deb_version:
+            logging.error('Build is not prepared. Nothong to sign')
+            exit(1)
         with change_directory(path_to):
-            deb_version = '%s~%s' % (self.repo.git.describe().strip(), self.distro['distro'])
-            self.changes = '{product}_{version}.changes'.format(
-                product=self.product['product'], version=deb_version
+            self.changes = '{product}_{version}-1_{arch}.changes'.format(
+                product=self.product['product'], version=self.deb_version,
+                arch=self.arch
             )
-            self.exe['pbuilder'].sign_package(sign_id, self.changes)
+            signer = Debsign()
+            signer.sign_product(sign_id, self.changes)
 

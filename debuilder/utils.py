@@ -49,3 +49,21 @@ class DPKG(Executable):
             logging.error('Aborting')
             exit(1)
         logging.info('Finished')
+
+
+class Debsign(Executable):
+    def __init__(self):
+        Executable.__init__(self)
+        self.command = 'debsign'
+
+    def sign_product(self, sign_id, changes_file):
+        args = ' -m %s %s' % (sign_id, changes_file)
+        self.execute(args, wait_command=True)
+        try:
+            self.check_errcode()
+        except ExecutableError as e:
+            logging.error(repr(e))
+            logging.error('Aborting')
+            exit(1)
+        logging.info('Finished')
+        self.subcommand = None
