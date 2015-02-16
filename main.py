@@ -91,5 +91,6 @@ def main():
     )
     build_config.prepare_sourcecode()
     build_config.build_sourcecode()
+    build_config.sign_package()
 
 exit(main())

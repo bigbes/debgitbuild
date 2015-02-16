@@ -54,6 +54,7 @@ class BuildConfig(object):
         self.product = product
         self.arch    = arch
         self.dsc     = None
+        self.changes = None
         
         # customize workdir
         if output is not None: 
@@ -156,3 +157,21 @@ class BuildConfig(object):
 
     def build_sourcecode(self):
         self.exe['pbuilder'].build_product(self)
+
+    def sign_package(self):
+        path_to = os.path.join(*self.variables['gitpath']).format(
+            distro=self.distro['distro'],
+            arch=self.arch,
+            product=self.product['product']
+        )
+        sign_id = self.distro['distro'].get('sign_id', None)
+        if not sign_id:
+            logging.error('No sign id specified. Aborting')
+            exit(1)
+        with change_directory(path_to):
+            deb_version = '%s~%s' % (self.repo.git.describe().strip(), self.distro['distro'])
+            self.changes = '{product}_{version}.changes'.format(
+                product=self.product['product'], version=deb_version
+            )
+            self.exe['pbuilder'].sign_package(sign_id, self.changes)
+
