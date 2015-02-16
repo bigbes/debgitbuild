@@ -7,7 +7,7 @@ import contextlib
 
 import git
 
-from debuilder.utils import DPKG, DCH, Debsign
+from debuilder.utils import DPKG, DCH, Debsign, Reprepro
 from debuilder.pbuilder import PBuilder
 
 
@@ -177,4 +177,18 @@ class BuildConfig(object):
             )
             signer = Debsign()
             signer.sign_product(sign_id, self.changes)
+
+
+    def import_package(self, repo_path):
+        path_to = os.path.join(*self.variables['resultdir']).format(
+            distro=self.distro['distro'],
+            arch=self.arch,
+        )
+        if not self.changes:
+            logging.error('Build is not signed. Aborting')
+            exit(0)
+        with change_directory(path_to):
+            importer = Reprepro()
+            importer.import_product(repo_path, self.distro['distro'], self.changes)
+        
 

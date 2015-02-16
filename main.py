@@ -19,6 +19,7 @@ def parse_args():
             action = 'count', default = False, dest = 'verbose')
     parser.add_argument('-i', '--image', type=str, default=None, dest='image')
     parser.add_argument('-o', '--output', type=str, default=None, dest='output')
+    parser.add_argument('-r', '--repo', type=str, default=None, dest='repo')
     args = parser.parse_args()
     if not args.distro:
         logging.error('There\'s no distribution specified. Aborting.')
@@ -92,5 +93,7 @@ def main():
     build_config.prepare_sourcecode()
     build_config.build_sourcecode()
     build_config.sign_package()
+    if args.repo is not None:
+        build_config.import_package(args.repo)
 
 exit(main())

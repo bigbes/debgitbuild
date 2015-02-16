@@ -67,3 +67,21 @@ class Debsign(Executable):
             exit(1)
         logging.info('Finished')
         self.subcommand = None
+
+class Reprepro(Executable):
+    def __init__(self):
+        Executable.__init__(self)
+        self.command = 'reprepro'
+
+    def import_product(self, repo_path, distribution, changes_file):
+        args = ' -b %s include %s %s' % (repo_path, distribution, changes_file)
+        self.execute(args, wait_command=True)
+        try:
+            self.check_errcode()
+        except ExecutableError as e:
+            logging.error(repr(e))
+            logging.error('Aborting')
+            exit(1)
+        logging.info('Finished')
+        self.subcommand = None
+
