@@ -189,6 +189,6 @@ class BuildConfig(object):
             exit(0)
         with change_directory(path_to):
             importer = Reprepro()
-            importer.import_product(repo_path, self.distro['distro'], self.changes)
+            importer.import_product(repo_path, self.distro['distro'], self.changes, self.arch)
         
 

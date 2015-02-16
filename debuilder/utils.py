@@ -73,8 +73,8 @@ class Reprepro(Executable):
         Executable.__init__(self)
         self.command = 'reprepro'
 
-    def import_product(self, repo_path, distribution, changes_file):
-        args = ' -b %s include %s %s' % (repo_path, distribution, changes_file)
+    def import_product(self, repo_path, distribution, changes_file, arch):
+        args = ' -b %s -A %s include %s %s' % (repo_path, arch, distribution, changes_file)
         self.execute(args, wait_command=True)
         try:
             self.check_errcode()
