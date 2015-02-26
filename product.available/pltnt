@@ -6,5 +6,5 @@ repository:
     ubuntu: /home/buildbot/ubuntu-master
 sign_id: tarantool-ru
 sign_email: tarantool-ru@googlegroups.com
-git: git://github.com/dr-co/dr-tarantool.git
+git: git://github.com/tarantool/dr-tarantool.git
 ...
