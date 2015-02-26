@@ -12,7 +12,7 @@ def long_description():
 
 setup(
     name='debuilder',
-    version='0.3.5',
+    version='0.3.6',
     description="Debian packages build tool",
     long_description=long_description(),
     url='https://github.com/bigbes/debgitbuild',
