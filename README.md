@@ -11,6 +11,12 @@ One day there was a need to build a DEB package from the python or command line.
 * Sign it with keyring
 * Export package to repository
 
+Install
+---------------
+```bash
+pip install debuilder
+```
+
 Example: Python
 ---------------
 ```python
