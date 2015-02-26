@@ -1,5 +1,3 @@
-import os
-import sys
 from setuptools import setup
 
 requirements = [
@@ -24,7 +22,7 @@ setup(
     license='http://www.apache.org/licenses/LICENSE-2.0',
     packages=['debuilder'],
     install_requires=requirements,
-    keywords = ['build', 'deb', 'packaging'],
+    keywords=['build', 'deb', 'packaging'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python',

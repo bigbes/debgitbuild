@@ -3,16 +3,31 @@ import logging
 import shlex
 import os
 
+
 class ExecutableError(Exception):
+    """
+    Main exception class
+    """
     def __init__(self, message, code):
-        Exception.__init__(self, message)
+        super(ExecutableError, self).__init__(message)
         self.code = code
 
     def __repr__(self):
         return '%s with errcode %d' % (self.message, self.code)
 
+
 class Executable(object):
-    def create_args(self, mapping):
+    """
+    Common shell command class
+    """
+    def __init__(self):
+        self.command = None
+        self.subcommand = None
+        self._process = None
+        self._output = None
+
+    @staticmethod
+    def create_args(mapping):
         cmd = ''
         for k, v in mapping.iteritems():
             lval = k.replace('_', '-')
@@ -27,12 +42,6 @@ class Executable(object):
                 cmd += lval
         return cmd
 
-    def __init__(self):
-        self.command = None
-        self.subcommand = None
-        self._process = None
-        self._output = None
-
     @property
     def process(self):
         return self._process
@@ -42,9 +51,9 @@ class Executable(object):
         self._process = value
 
     def append_subcommand(self, cmd):
-        return  cmd + ' ' + self.subcommand
+        return cmd + ' ' + self.subcommand
 
-    def execute(self, args = None, last = None, wait_command = True, workdir = None):
+    def execute(self, args=None, last=None, wait_command=True, workdir=None):
         if not isinstance(self.command, basestring):
             raise ExecutableError('Command must be defined must be basestring', -1)
         cmd = self.command
@@ -62,10 +71,8 @@ class Executable(object):
             cmd += ' ' + last
         logging.info(cmd)
         self.process = subprocess.Popen(
-                shlex.split(cmd),
-#                 stdout = subprocess.PIPE,
-#                 stderr = subprocess.PIPE,
-                cwd = (workdir if workdir else os.getcwd()),
+            shlex.split(cmd),
+            cwd=(workdir if workdir else os.getcwd()),
         )
         if wait_command:
             self.process.wait()
@@ -76,14 +83,6 @@ class Executable(object):
     def check_errcode(self):
         if self.process.poll() and self.process.returncode:
             raise ExecutableError(
-                    'Command failed with code %d' % self.process.returncode,
-                    self.process.returncode
+                'Command failed with code %d' % self.process.returncode,
+                self.process.returncode
             )
-        return
-
-#     def dump_output(self, path, name):
-#         with open(os.path.join(path, name + '.stdout'), 'w') as f:
-#             f.write(self._process.stdout.read())
-#         with open(os.path.join(path, name + '.stderr'), 'w') as f:
-#             f.write(self._process.stderr.read())
-#

@@ -7,19 +7,17 @@ import argparse
 
 from debuilder import BuildConfig
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-D', '--distribution',
-            type = str, default = '', dest = 'distro')
-    parser.add_argument('-A', '--architecture',
-            type = str, default = '', dest = 'arch')
-    parser.add_argument('-P', '--product',
-            type = str, default = '', dest = 'product')
-    parser.add_argument('-v', '--verbose',
-            action = 'count', default = False, dest = 'verbose')
+    parser.add_argument('-D', '--distribution', type=str, default='', dest='distro')
+    parser.add_argument('-A', '--architecture', type=str, default='', dest='arch')
+    parser.add_argument('-P', '--product', type=str, default='', dest='product')
+    parser.add_argument('-v', '--verbose', action='count', default=False, dest='verbose')
     parser.add_argument('-i', '--image', type=str, default=None, dest='image')
     parser.add_argument('-o', '--output', type=str, default=None, dest='output')
     parser.add_argument('-r', '--repo', type=str, default=None, dest='repo')
+
     args = parser.parse_args()
     if not args.distro:
         logging.error('There\'s no distribution specified. Aborting.')
@@ -31,10 +29,13 @@ def parse_args():
         logging.error('There\'s no product specified. Aborting.')
     return args
 
+
 def check_distro(distr):
     path_to = os.path.join('distro.available', distr)
     if not os.path.exists(path_to):
-        logging.error('There\'s no distribution %s in "distro.available" directory. Aborting.' % distr)
+        logging.error(
+            'There\'s no distribution %s in "distro.available" directory. Aborting.' % distr
+        )
         exit(1)
     yml = None
     try:
@@ -47,6 +48,7 @@ def check_distro(distr):
         exit(1)
     return yml
 
+
 def check_arch(dist_info, arch):
     if arch not in ['i386', 'amd64']:
         logging.error('Architecture must be one of i386 or amd64. Aborting.')
@@ -57,7 +59,8 @@ def check_arch(dist_info, arch):
     logging.error('Architecture %s not found in dist_info file. Aborting.' % arch)
     exit(1)
 
-def check_product(product, arch):
+
+def check_product(product):
     path_to = os.path.join('product.available', product)
     if not os.path.exists(path_to):
         logging.error('There\'s no product %s in "product.available" directory. Aborting.' % product)
@@ -73,19 +76,24 @@ def check_product(product, arch):
         exit(1)
     return yml
 
+
 def cd_to_script():
     path = os.path.dirname(sys.argv[0])
     if not path:
         path = '.'
     os.chdir(path)
 
+
 def main():
-    logging.basicConfig(level = logging.DEBUG)
+    """
+    Example command line interface for debuilder
+    """
+    logging.basicConfig(level=logging.DEBUG)
     cd_to_script()
     args = parse_args()
     distro_settings = check_distro(args.distro)
     check_arch(distro_settings, args.arch)
-    product_settings = check_product(args.product, args.arch)
+    product_settings = check_product(args.product)
     build_config = BuildConfig(
         product_settings, distro_settings, args.arch, 
         image=args.image, output=args.output
@@ -96,4 +104,5 @@ def main():
     if args.repo is not None:
         build_config.import_package(args.repo)
 
-exit(main())
+if __name__ == "__main__":
+    main()
