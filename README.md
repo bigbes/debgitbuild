@@ -26,6 +26,7 @@ distro_settings = {
 }
 image = 'base_wheezy_i386.tgz'
 output = '/home/admin/result/'
+repository = '/home/admin/repo/'
 arch = 'i386'
 product_settings = {
     "branch": "master",
@@ -41,10 +42,13 @@ build_config = BuildConfig(
 )
 build_config.prepare_sourcecode()
 build_config.build_sourcecode()
+build_config.import_package(repository)
 ```
 
 Example: Command line
 ---------------
 ```bash
-./main.py -A i386 -D wheezy -P my_awesome_product -i base_wheezy_i386.tgz -o /home/admin/result/
+./main.py -A i386 -D wheezy -P my_awesome_product -i base_wheezy_i386.tgz -o /home/admin/result/ -r /home/admin/repo/
 ```
+
+Enjoy!
