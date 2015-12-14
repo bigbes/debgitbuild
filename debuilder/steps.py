@@ -130,6 +130,8 @@ class BuildConfig(object):
         logging.info('Checkoutin branch %s', repr(self.product['branch']))
         try:
             self.repo.git.checkout(self.product['branch'])
+            for submodule in self.repo.submodules:
+                submodule.update(init=True, recursive=True)
         except git.GitCommandError as e:
             logging.error(
                 'Failed to checkout branch %s with error %s',
