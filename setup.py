@@ -1,7 +1,7 @@
 from setuptools import setup
 
 requirements = [
-    'PyYaml==3.10',
+    'PyYaml==5.1',
     'GitPython==0.3.6'
 ]
 
